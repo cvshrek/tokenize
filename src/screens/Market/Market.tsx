@@ -88,10 +88,11 @@ function MarketScreen(): React.ReactElement {
                     <Icon
                       name={
                         changePercentage >= 0
-                          ? "arrow-up-bold"
-                          : "arrow-down-bold"
+                          ? "arrow-up-thin"
+                          : "arrow-down-thin"
                       }
                       color={color}
+                      size={FontSizes.font_14}
                     />
                   </Container>
                 ) : null}
