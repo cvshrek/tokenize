@@ -73,10 +73,8 @@ yarn.lock
 # react-native-config codegen
 ios/tmp.xcconfig
 
-Wareflex Internal.app.dSYM.zip
 android/app/src/main/assets/index.android.bundle
 ios/Podfile.lock
-WLGO-UAT.app.dSYM.zip
 
 # Yarn
 .yarn/*
