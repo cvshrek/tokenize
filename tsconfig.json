@@ -26,6 +26,8 @@
       "@types/*": ["src/types/*"],
       "@helpers": ["src/helpers/index"],
       "@helpers/*": ["src/helpers/*"],
+      "@stores": ["src/stores/index"],
+      "@stores/*": ["src/stores/*"]
     }
   }
 }
