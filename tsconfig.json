@@ -1,0 +1,31 @@
+{
+  "extends": "@react-native/typescript-config/tsconfig.json",
+  "compilerOptions": {
+    "strict": true,
+    "baseUrl": ".",
+    "paths": {
+      "@src/*": [".src/*"],
+      "@screens": ["src/screens/index"],
+      "@screens/*": ["src/screens/*"],
+      "@components": ["src/components/index"],
+      "@components/*": ["src/components/*"],
+      "@utils": ["src/utils/index"],
+      "@utils/*": ["src/utils/*"],
+      "@services/*": ["src/services/*"],
+      "@navigators": ["src/navigators"],
+      "@navigators/*": ["src/navigators/*"],
+      "@constants": ["src/constants/index"],
+      "@constants/*": ["src/constants/*"],
+      "@assets/*": ["src/assets/*"],
+      "@configs": ["src/configs/index"],
+      "@configs/*": ["src/configs/*"],
+      "@enums": ["src/enums/index"],
+      "@enums/*": ["src/enums/*"],
+      "@models": ["src/models/index"],
+      "@models/*": ["src/models/*"],
+      "@types/*": ["src/types/*"],
+      "@helpers": ["src/helpers/index"],
+      "@helpers/*": ["src/helpers/*"],
+    }
+  }
+}
