@@ -17,7 +17,7 @@ function SignInForm({
   submitting,
   onSubmit,
   onForgotPasswordPress
-}: SignInFormProps): React.ReactElement {
+}: Readonly<SignInFormProps>): React.ReactElement {
   const [visiblePassword, setVisiblePassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
 
@@ -38,7 +38,7 @@ function SignInForm({
   });
 
   return (
-    <Container gap={Dimens.dimen_72} padding={Dimens.dimen_16}>
+    <Container gap={Dimens.dimen_72} padding={Dimens.dimen_8}>
       <Container gap={Dimens.dimen_16}>
         <Controller
           name="email"
@@ -121,7 +121,7 @@ function SignInForm({
               Remember me
             </Text>
           </Container>
-          <Pressable>
+          <Pressable onPress={onForgotPasswordPress}>
             <Text fontSize={FontSizes.font_14} color={Colors.white}>
               Forgot your password
             </Text>

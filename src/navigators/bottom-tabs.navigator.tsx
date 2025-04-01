@@ -1,13 +1,16 @@
-import {Container, Text} from "@components";
-import {Colors, Fonts, FontSizes} from "@constants";
-import Icon from "@react-native-vector-icons/material-design-icons";
+import {Colors, Dimens, Fonts, FontSizes} from "@constants";
 import {
   createBottomTabNavigator,
   BottomTabBarButtonProps,
   BottomTabNavigationOptions
 } from "@react-navigation/bottom-tabs";
-import {MarketScreen} from "@screens";
+import {HomeScreen, MarketScreen} from "@screens";
 import React, {ReactNode} from "react";
+import HomeLogo from "@assets/icons/home.svg";
+import MarketIcon from "@assets/icons/market.svg";
+import WalletIcon from "@assets/icons/wallet.svg";
+import PortfolioIcon from "@assets/icons/portfolio.svg";
+import MoreIcon from "@assets/icons/more.svg";
 
 export type BottomTabParamList = {
   HomeScreen: undefined;
@@ -20,6 +23,7 @@ export type BottomTabParamList = {
 type TabIconProps = {
   color: string;
   size: number;
+  focused: boolean;
 };
 interface TabOption {
   label?: string;
@@ -27,26 +31,13 @@ interface TabOption {
   button?: (props: BottomTabBarButtonProps) => ReactNode;
 }
 
-const renderTabIcon = (
-  icon:
-    | "home"
-    | "chart-line"
-    | "wallet"
-    | "briefcase"
-    | "dots-horizontal-circle"
-) => {
-  const TabIcon = (props: TabIconProps) => (
-    <Icon size={props.size} name={icon} color={props.color} />
-  );
-  return TabIcon;
-};
-
 const setTabOptions = (options: TabOption): BottomTabNavigationOptions => ({
   tabBarLabel: options.label,
   tabBarIcon: options.icon,
   tabBarActiveTintColor: Colors.primary,
   tabBarStyle: {
-    backgroundColor: Colors.white
+    backgroundColor: Colors.white,
+    paddingVertical: Dimens.dimen_8
   },
   tabBarLabelStyle: {
     fontFamily: Fonts.PRIMARY_REGULAR,
@@ -57,6 +48,9 @@ const setTabOptions = (options: TabOption): BottomTabNavigationOptions => ({
 
 const BottomTabStack = createBottomTabNavigator<BottomTabParamList>();
 
+const getIconColor = (isFocused: boolean): string =>
+  isFocused ? Colors.primary : Colors.grey_500;
+
 function BottomNavigatior(): React.ReactElement {
   return (
     <BottomTabStack.Navigator
@@ -66,13 +60,16 @@ function BottomNavigatior(): React.ReactElement {
       }}>
       <BottomTabStack.Screen
         name="HomeScreen"
-        options={setTabOptions({icon: renderTabIcon("home"), label: "Home"})}
-        component={MarketScreen}
+        options={setTabOptions({
+          icon: ({focused}) => <HomeLogo stroke={getIconColor(focused)} />,
+          label: "Home"
+        })}
+        component={HomeScreen}
       />
       <BottomTabStack.Screen
         name="MarketScreen"
         options={setTabOptions({
-          icon: renderTabIcon("chart-line"),
+          icon: ({focused}) => <MarketIcon stroke={getIconColor(focused)} />,
           label: "Markets"
         })}
         component={MarketScreen}
@@ -80,7 +77,7 @@ function BottomNavigatior(): React.ReactElement {
       <BottomTabStack.Screen
         name="WalletScreen"
         options={setTabOptions({
-          icon: renderTabIcon("wallet"),
+          icon: ({focused}) => <WalletIcon stroke={getIconColor(focused)} />,
           label: "Wallet"
         })}
         component={MarketScreen}
@@ -88,7 +85,7 @@ function BottomNavigatior(): React.ReactElement {
       <BottomTabStack.Screen
         name="PortfolioScreen"
         options={setTabOptions({
-          icon: renderTabIcon("briefcase"),
+          icon: ({focused}) => <PortfolioIcon stroke={getIconColor(focused)} />,
           label: "Portfolio"
         })}
         component={MarketScreen}
@@ -96,7 +93,7 @@ function BottomNavigatior(): React.ReactElement {
       <BottomTabStack.Screen
         name="MoreScreen"
         options={setTabOptions({
-          icon: renderTabIcon("dots-horizontal-circle"),
+          icon: ({focused}) => <MoreIcon stroke={getIconColor(focused)} />,
           label: "More"
         })}
         component={MarketScreen}

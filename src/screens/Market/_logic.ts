@@ -7,11 +7,11 @@ import {useRef, useState} from "react";
 function useMarket() {
   const [currencyCategories, setCurrencyCategories] = useState<string[]>([]);
   const [selectedCurrency, setSelectedCurrency] = useState<string>("");
-  const [currencyMarkets, setCurrencyMarkets] = useState<Currency[]>([]);
-  const [priceMap, setPriceMap] = useState<Record<string, Price>>();
+  const [currencyMarkets, setCurrencyMarkets] = useState<CurrencyPrice[]>([]);
 
   const summaryRef = useRef<ICurrencyResponse[]>([]);
   const catListRef = useRef<FlashList<any>>(null);
+  const priceMapRef = useRef<Record<string, Price>>(null);
 
   async function getCurrencyPrices() {
     const response = await MarketService.getMarketSummaries();
@@ -23,18 +23,26 @@ function useMarket() {
         },
         {} as Record<string, Price>
       );
-      setPriceMap(priceMap);
+      priceMapRef.current = priceMap;
     }
   }
 
   async function getMarketSummary() {
+    await getCurrencyPrices();
     const response = await MarketService.getMarkets();
     if (response?.data) {
       summaryRef.current = response.data;
       const categories = response.data.map(item => item.title);
+      const currencyPrices: CurrencyPrice[] = [];
+      response.data[0].list.forEach(item => {
+        currencyPrices.push({
+          ...item,
+          price: priceMapRef.current?.[item.id] as Price
+        });
+      });
       setCurrencyCategories(categories);
       setSelectedCurrency(response.data[0].title);
-      setCurrencyMarkets(response.data[0].list);
+      setCurrencyMarkets(currencyPrices);
     }
   }
 
@@ -52,9 +60,15 @@ function useMarket() {
     const currencyMarket = summaryRef.current.find(
       item => item.title === value
     );
-    console.log(currencyMarket);
     if (currencyMarket) {
-      setCurrencyMarkets(currencyMarket.list);
+      const currencyPrices: CurrencyPrice[] = [];
+      currencyMarket.list.forEach(item => {
+        currencyPrices.push({
+          ...item,
+          price: priceMapRef.current?.[item.id] as Price
+        });
+      });
+      setCurrencyMarkets(currencyPrices);
     }
   }
 
@@ -63,7 +77,6 @@ function useMarket() {
     selectedCurrency,
     currencyMarkets,
     catListRef,
-    priceMap,
     getMarketSummary,
     getCurrencyPrices,
     onCategoryChange

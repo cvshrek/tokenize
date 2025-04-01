@@ -4,9 +4,9 @@ import Icon from "@react-native-vector-icons/material-design-icons";
 import {FlashList, ListRenderItem} from "@shopify/flash-list";
 import useMarket from "./_logic";
 import {useCallback, useEffect} from "react";
-import FastImage from "@d11/react-native-fast-image";
+import SearchIcon from "@assets/icons/search.svg";
 import styles from "./styles";
-import {FlatList} from "react-native";
+import {Image} from "react-native";
 
 function MarketScreen(): React.ReactElement {
   const {
@@ -14,7 +14,6 @@ function MarketScreen(): React.ReactElement {
     currencyMarkets,
     selectedCurrency,
     catListRef,
-    priceMap,
     getMarketSummary,
     getCurrencyPrices,
     onCategoryChange
@@ -41,15 +40,13 @@ function MarketScreen(): React.ReactElement {
     [selectedCurrency]
   );
 
-  const renderMarketItem: ListRenderItem<Currency> = useCallback(
+  const renderMarketItem: ListRenderItem<CurrencyPrice> = useCallback(
     ({item}) => {
-      const price = priceMap ? parseFloat(priceMap[item.id]?.lastPrice) : 0;
-      const changePercentage = priceMap
-        ? ((parseFloat(priceMap[item.id].lastPrice) -
-            parseFloat(priceMap[item.id].openPrice)) /
-            parseFloat(priceMap[item.id].lastPrice)) *
-          100
-        : 0;
+      const price = parseFloat(item.price.lastPrice) ?? 0;
+      const changePercentage =
+        ((parseFloat(item.price.lastPrice) - parseFloat(item.price.openPrice)) /
+          parseFloat(item.price.lastPrice)) *
+        100;
       const color = changePercentage >= 0 ? Colors.green : Colors.red;
       return (
         <Card>
@@ -57,7 +54,7 @@ function MarketScreen(): React.ReactElement {
             flexDirection="row"
             gap={Dimens.dimen_16}
             padding={Dimens.dimen_16}>
-            <FastImage
+            <Image
               source={require("@assets/images/btc.png")}
               style={styles.listImage}
             />
@@ -102,7 +99,7 @@ function MarketScreen(): React.ReactElement {
         </Card>
       );
     },
-    [priceMap]
+    []
   );
 
   return (
@@ -111,13 +108,7 @@ function MarketScreen(): React.ReactElement {
         hideBackButton
         title="MARKETS"
         titleAlign="left"
-        rightComponent={
-          <Icon
-            name="magnify"
-            size={FontSizes.font_23}
-            color={Colors.darkGrey}
-          />
-        }
+        rightComponent={<SearchIcon />}
       />
       <Container flex={1} gap={Dimens.dimen_16}>
         {selectedCurrency.length ? (
@@ -139,7 +130,6 @@ function MarketScreen(): React.ReactElement {
         <Container flex={1}>
           <FlashList
             data={currencyMarkets}
-            extraData={priceMap}
             renderItem={renderMarketItem}
             ItemSeparatorComponent={() => (
               <Container style={{height: Dimens.dimen_12}} />
